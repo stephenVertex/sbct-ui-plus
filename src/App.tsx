@@ -1,10 +1,12 @@
 import { generateClient } from "aws-amplify/data";
+import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useEffect, useState } from "react";
 import type { Schema } from "../amplify/data/resource";
 
 const client = generateClient<Schema>();
 
 function App() {
+  const { signOut } = useAuthenticator();
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [newTodoContent, setNewTodoContent] = useState("");
 
@@ -44,12 +46,42 @@ function App() {
       borderRadius: '12px',
       boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
     }}>
-      <h1 style={{
-        fontSize: '2rem',
-        fontWeight: '600',
-        color: '#1a1a1a',
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         marginBottom: '24px'
-      }}>My todos</h1>
+      }}>
+        <h1 style={{
+          fontSize: '2rem',
+          fontWeight: '600',
+          color: '#1a1a1a',
+          margin: 0
+        }}>My todos</h1>
+        
+        <button
+          onClick={signOut}
+          style={{
+            backgroundColor: '#ef4444',
+            color: 'white',
+            padding: '8px 16px',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '0.875rem',
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#dc2626';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#ef4444';
+          }}
+        >
+          Sign Out
+        </button>
+      </div>
       
       <form onSubmit={createTodo} style={{
         marginBottom: '20px',
